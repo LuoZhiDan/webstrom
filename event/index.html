@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <button id="btn">触发事件</button>
+</body>
+<script>
+    /*非IE下可以是使用 createEvent, initEvent, dispatchEvent*/
+    /*IE下 createEventObject fireEvent*/
+    window.onload = function () {
+        var Event = function () {
+            this.init();
+        }
+
+        Event.prototype = {
+            event : {},
+            handle : {},
+            init : function(){
+                this.core = document.createElement('div');
+            },
+            once : function(type, callback){
+                var me = this;
+                this.core.addEventListener(type, function(event){
+                    callback.call(me.core, event);
+                    delete me.event[type].data;
+                    me.removeEvent(type, arguments.callee);
+                });
+            },
+            on : function(type, callback){
+                var me = this;
+                this.core.addEventListener(type, function (ev) {
+                    callback.call(me.core, event);
+                    delete me.event[type].data
+                    me.handle[type] = arguments.callee;
+                });
+            },
+            removeEvent : function (type ,callback){
+                var handle = callback || this.handle[type];
+                this.core.removeEventListener(type, handle);
+            },
+            fireEvent : function(type,data){
+                var ev = this.event[type];
+                if(data){
+                    ev.data = data;
+                }
+                this.core.dispatchEvent(ev);
+            },
+            createEvent : function(type){//创建事件
+                if(typeof type == 'string'){
+                    var type = [type];
+                }
+                for(var i = type.length; i--;){
+                    var ev = document.createEvent('Events');
+                    ev.initEvent(type[i], false, false);
+                    this.event[type[i]] = ev;
+                }
+                return this.event;
+            }
+        }
+        var extend = function (target, source) {
+            for(var p in source){
+                target[p] = source[p];
+            }
+            return target;
+        }
+        var obj = extend({}, new Event());
+        obj.createEvent('changeValue');
+        obj.once('changeValue',function(eve){
+            console.log(eve.data);
+            alert('我是天才！');
+        })
+        document.querySelector('#btn').onclick = function () {
+            obj.fireEvent('changeValue',{name:'name1l'});
+            obj.removeEvent('changeValue');
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+</body>
+    <script>
+        var obj = {
+            name : 'me'
+        };
+        obj.model = {
+            get : function(){
+                return this.superClass;
+            }
+        }
+        console.log(obj.model.get());
+    </script>
+</html>

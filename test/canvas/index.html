@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas</title>
+</head>
+<body>
+        <div style="width: 800px;height: 500px;margin: 20px auto;">
+            <canvas width="800" height="500" id="canvas">
+                <p>浏览器不支持</p>
+            </canvas>
+        </div>
+</body>
+   <script>
+       var canvas = document.querySelector('#canvas');
+       var ctx = canvas.getContext('2d');
+
+       ctx.fillRect(0,0,300,300);
+   </script>
+</html>
